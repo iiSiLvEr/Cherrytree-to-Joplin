@@ -62,9 +62,12 @@ foreach ($file in $files) {
     }
 }
 ```
-
+```php
 Press (Ctrl + S) -> then -> (Ctrl + W)
 Then in cli run .\Ez.ps1
-You Can now go to Joplin and Import Newly NewExportedFolder! :)
+You Can now go to Joplin and Import As Text-Directory Our newly NewExportedFolder! :)
 
+
+
+```
 
