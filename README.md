@@ -1,4 +1,6 @@
-# Migrating Note-Taking Apps from Cherrytree to Joplin
+# Migrating from Cherrytree to Joplin
+# Note-Taking Apps 
+
 
 Exporting from Cherrytree:
 In Cherrytree select Export -> As Plain Text -> All the Tree (without making it Single File).
