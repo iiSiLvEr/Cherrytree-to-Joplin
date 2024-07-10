@@ -46,20 +46,27 @@ echo $files
 
 foreach ($file in $files) {
     #echo $file
+    
     # Get the file name without extension
-    $fileName = $file.Name.Replace("_", " ")
+    $fileName = $file.Name
     $baseName = [System.IO.Path]::GetFileNameWithoutExtension($fileName)
     
+    # Update file name to get after -- 
+    $fileName = $file.Name.Replace("_", " ")
+    $pattern = "--\s*([^--]*)$"
+    if ($fileName -match $pattern) {
+        $fileName = $matches[1]
+    }
+
     echo "fileName:"
     echo $fileName
-    echo "baseName:"
-    echo $baseName
-    
+
     # Split the file name by "--"
     $parts = $baseName -split "--"
-    echo "parts:"
-    echo $parts
-    #sleep 50
+    #echo "Contain -- :"
+    #echo $parts
+
+    #sleep 1
     
     # If the file name contains "--", Create folder
     if ($parts.Length -gt 1) {
@@ -69,24 +76,32 @@ foreach ($file in $files) {
         # Create directory structure based on the parts
         for ($i = 1; $i -lt $parts.Length; $i++) {
             $currentFolder = Join-Path -Path $currentFolder -ChildPath $parts[$i]
+            
+            $currentFolder = $currentFolder.Replace("_", " ")
             if (-not (Test-Path $currentFolder)) {
                 New-Item -Path $currentFolder -ItemType Directory
             }
         }
-        
-        # Handle File 
-        $fileName = $file.Name -replace '^.*?--', ''
 
         # Copy the file to the final directory
         $destFilePath = Join-Path -Path $currentFolder -ChildPath $fileName
+        #echo "destFilePath1:"
+        #echo $destFilePath
+        #sleep 1
+
         Copy-Item -Path $file.FullName -Destination $destFilePath
     } else {
+
         # For files without "--", move to the base folder
         $parentFolder = Join-Path -Path $destDir -ChildPath $parts[0]
+        $parentFolder = $parentFolder.Replace("_", " ")
         if (-not (Test-Path $parentFolder)) {
             New-Item -Path $parentFolder -ItemType Directory
         }
         $destFilePath = Join-Path -Path $parentFolder -ChildPath $fileName
+        #echo "destFilePath2:"
+        #echo $destFilePath
+        #sleep 1
         Copy-Item -Path $file.FullName -Destination $destFilePath
     }
 }
